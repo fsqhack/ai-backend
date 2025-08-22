@@ -1,0 +1,24 @@
+flask
+flask_cors
+gunicorn
+pydantic
+colorlog
+
+langchain_core
+langchain_openai
+python-dotenv
+# vertexai
+pillow
+
+sqlalchemy
+psycopg2-binary
+pandas
+
+pymongo[srv]
+scikit-learn
+geopy
+sympy
+youtube-search-python
+httpx<0.28
+
+google-genai
