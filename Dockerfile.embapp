@@ -4,12 +4,11 @@ FROM python:3.11-slim
 # Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY emb_requirements.txt .
-RUN pip install -r emb_requirements.txt
 
 # Copy the current directory contents into the container at /app
 COPY . .
+RUN ls -al
+RUN pip install -r emb_requirements.txt
 
 # Install required dependencies
 RUN apt-get update && apt-get install -y \
