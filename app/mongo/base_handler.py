@@ -12,7 +12,7 @@ load_dotenv()
 class BaseMongoHandler:
     def __init__(self, collection_name):
         self.client = MongoClient(os.environ['MONGO_DB_URI'])
-        self.db_name = "capital_one_db"
+        self.db_name = "fsq_db"
         self.db = self.client[self.db_name]
         self.collection = self.db[collection_name]
 

@@ -7,18 +7,32 @@ on:
             - main
             - dev-0
 jobs:
-    main: 
+    # main: 
+    #     uses: fsqhack/ai-backend/.github/workflows/python-gcp-main.yml@main
+    #     secrets: inherit
+    #     with:
+    #         GCP_PROJECT_ID: sample-project-1-464117
+    #         CLOUD_RUN_SERVICE: fsq-ai-server
+    #         CLOUD_RUN_REGION: us-central1
+    #         GAR_LOCATION: us-central1-docker.pkg.dev/sample-project-1-464117/fsq-ai-repo
+    #         GAR_LOCATION_PREFIX: us-central1-docker.pkg.dev
+    #         IMAGE_NAME: fsq-ai-server-image
+    #         SERVICE_ACCOUNT: sample-project-1-464117@sample-project-1-464117.iam.gserviceaccount.com
+    #         DOCKER_FILE: Dockerfile.app
+    #         CLOUD_RUN_RAM: 2Gi
+
+    emb_main:
         uses: fsqhack/ai-backend/.github/workflows/python-gcp-main.yml@main
         secrets: inherit
         with:
             GCP_PROJECT_ID: sample-project-1-464117
-            CLOUD_RUN_SERVICE: fsq-ai-server
+            CLOUD_RUN_SERVICE: fsq-emb-server
             CLOUD_RUN_REGION: us-central1
             GAR_LOCATION: us-central1-docker.pkg.dev/sample-project-1-464117/fsq-ai-repo
             GAR_LOCATION_PREFIX: us-central1-docker.pkg.dev
-            IMAGE_NAME: fsq-ai-server-image
+            IMAGE_NAME: fsq-emb-server-image
             SERVICE_ACCOUNT: sample-project-1-464117@sample-project-1-464117.iam.gserviceaccount.com
-            DOCKER_FILE: Dockerfile.app
+            DOCKER_FILE: Dockerfile.embapp
             CLOUD_RUN_RAM: 2Gi
 
     # python-aws:
