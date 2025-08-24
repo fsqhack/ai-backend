@@ -59,8 +59,8 @@ jobs:
       # -------------------------
       - name: Build Publisher Docker Image
         run: |
-          echo "${{ secrets.GCP_SA_KEY_B64 }}" | base64 --decode > app/key.json
-          echo "${{ secrets.ENV_B64 }}" | base64 --decode > app/.env
+          echo "${{ secrets.GCP_SA_KEY_B64 }}" | base64 --decode > key.json
+          echo "${{ secrets.ENV_B64 }}" | base64 --decode > .env
           docker build -f ${{ inputs.DOCKER_FILE }} -t ${{ inputs.GAR_LOCATION }}/${{ inputs.IMAGE_NAME }}:latest .
           docker images
 
