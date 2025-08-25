@@ -1,7 +1,7 @@
 flask
 flask-cors
-transformers
-torch
-Pillow
+# transformers
+# torch
+# Pillow
 python-dotenv
-numpy
+# numpy
