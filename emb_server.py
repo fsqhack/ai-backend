@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
-# from transformers import CLIPProcessor, CLIPModel
-# import torch
-# from PIL import Image
-# import io
-# import base64
+from transformers import CLIPProcessor, CLIPModel
+import torch
+from PIL import Image
+import io
+import base64
 
 import os
 import numpy as np
@@ -12,48 +12,48 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# class CLIPEmbedder:
-#     """
-#     A wrapper around CLIP model to generate embeddings for text and images.
-#     """
+class CLIPEmbedder:
+    """
+    A wrapper around CLIP model to generate embeddings for text and images.
+    """
 
-#     def __init__(self, model_name: str = "openai/clip-vit-base-patch32"):
-#         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#         self.model = CLIPModel.from_pretrained(model_name).to(self.device)
-#         self.processor = CLIPProcessor.from_pretrained(model_name)
-#         self.model.eval()
+    def __init__(self, model_name: str = "openai/clip-vit-base-patch32"):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = CLIPModel.from_pretrained(model_name).to(self.device)
+        self.processor = CLIPProcessor.from_pretrained(model_name)
+        self.model.eval()
 
-#     def embed_texts(self, texts):
-#         """
-#         Generate embeddings for a list of texts.
-#         """
-#         if isinstance(texts, str):
-#             texts = [texts]
+    def embed_texts(self, texts):
+        """
+        Generate embeddings for a list of texts.
+        """
+        if isinstance(texts, str):
+            texts = [texts]
 
-#         inputs = self.processor(text=texts, return_tensors="pt", padding=True).to(self.device)
+        inputs = self.processor(text=texts, return_tensors="pt", padding=True).to(self.device)
 
-#         with torch.no_grad():
-#             embeddings = self.model.get_text_features(**inputs)
+        with torch.no_grad():
+            embeddings = self.model.get_text_features(**inputs)
 
-#         return embeddings.cpu().tolist()
+        return embeddings.cpu().tolist()
 
-#     def embed_images(self, images):
-#         """
-#         Generate embeddings for a list of images.
-#         Images can be base64 strings or PIL Images.
-#         """
-#         processed_images = []
-#         for img in images:
-#             if isinstance(img, str):  # assume base64
-#                 img = Image.open(io.BytesIO(base64.b64decode(img))).convert("RGB")
-#             processed_images.append(img)
+    def embed_images(self, images):
+        """
+        Generate embeddings for a list of images.
+        Images can be base64 strings or PIL Images.
+        """
+        processed_images = []
+        for img in images:
+            if isinstance(img, str):  # assume base64
+                img = Image.open(io.BytesIO(base64.b64decode(img))).convert("RGB")
+            processed_images.append(img)
 
-#         inputs = self.processor(images=processed_images, return_tensors="pt").to(self.device)
+        inputs = self.processor(images=processed_images, return_tensors="pt").to(self.device)
 
-#         with torch.no_grad():
-#             embeddings = self.model.get_image_features(**inputs)
+        with torch.no_grad():
+            embeddings = self.model.get_image_features(**inputs)
 
-#         return embeddings.cpu().tolist()
+        return embeddings.cpu().tolist()
 
 
 # Check if OPENAI_API_KEY is set
@@ -97,7 +97,7 @@ class OpenAIEmbedder:
 
 
 # Initialize
-# CLIP_EMBEDDER = CLIPEmbedder()
+CLIP_EMBEDDER = CLIPEmbedder()
 OPENAI_EMBEDDER = OpenAIEmbedder()  # Initialize the embedder instance
 app = Flask(__name__)
 
@@ -112,28 +112,28 @@ def home():
     return jsonify({"message": "CLIP Embedder is running!"})
 
 
-# @app.route("/clip/embed-texts", methods=["POST"])
-# def embed_texts():
-#     data = request.json
-#     texts = data.get("texts", None)
+@app.route("/clip/embed-texts", methods=["POST"])
+def embed_texts():
+    data = request.json
+    texts = data.get("texts", None)
 
-#     if not texts:
-#         return jsonify({"error": "No texts provided"}), 400
+    if not texts:
+        return jsonify({"error": "No texts provided"}), 400
 
-#     embeddings = CLIP_EMBEDDER.embed_texts(texts)
-#     return jsonify({"embeddings": embeddings})
+    embeddings = CLIP_EMBEDDER.embed_texts(texts)
+    return jsonify({"embeddings": embeddings})
 
 
-# @app.route("/clip/embed-images", methods=["POST"])
-# def embed_images():
-#     data = request.json
-#     images = data.get("images", None)
+@app.route("/clip/embed-images", methods=["POST"])
+def embed_images():
+    data = request.json
+    images = data.get("images", None)
 
-#     if not images:
-#         return jsonify({"error": "No images provided"}), 400
+    if not images:
+        return jsonify({"error": "No images provided"}), 400
 
-#     embeddings = CLIP_EMBEDDER.embed_images(images)
-#     return jsonify({"embeddings": embeddings})
+    embeddings = CLIP_EMBEDDER.embed_images(images)
+    return jsonify({"embeddings": embeddings})
 
 # OpenAI Embedder Endpoint
 @app.route("/openai/", methods=["GET"])
