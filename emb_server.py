@@ -23,7 +23,7 @@ class CLIPEmbedder:
         self.processor = CLIPProcessor.from_pretrained(model_name)
         self.model.eval()
 
-    def embed_texts(self, texts):
+    def embed_texts(self, texts): 
         """
         Generate embeddings for a list of texts.
         """
