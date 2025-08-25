@@ -4,6 +4,7 @@ import torch
 from PIL import Image
 import io
 import base64
+import openai
 
 import os
 import numpy as np
@@ -70,7 +71,6 @@ class OpenAIEmbedder:
     """
 
     def __init__(self, model: str = "text-embedding-ada-002"):
-        import openai
         openai.api_key = os.environ.get("OPENAI_API_KEY")
         self.openai = openai
         self.model = model
