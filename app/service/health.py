@@ -212,8 +212,7 @@ User is saying: {user_input}
 
         self.push_health_alert(user_id, alert)
         
-        if alert['is_severe']:
-            self.push_pharmacy_alert(user_id, fetched_info['lat'], fetched_info['lon'], alert['message'])
+        self.push_pharmacy_alert(user_id, fetched_info['lat'], fetched_info['lon'], alert['message'])
 
         return {
             "lat": fetched_info['lat'],
