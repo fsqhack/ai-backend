@@ -5,6 +5,7 @@ from app.mongo.fsq_handlers import HEALTH_DATA_HANDLER, ALERT_HANDLER
 from datetime import datetime
 import os
 import numpy as np  
+import requests
 
 from pydantic import BaseModel, Field
 
@@ -139,6 +140,38 @@ Risk is consdered if
         
         self.alert_handler.add_alert(user_id, timestamp, metadata)
 
+    def push_pharmacy_alert(self, user_id: str, lat: float, lon: float, alert: str):
+        foursquare_microservice_url = "http://13.126.242.38:5000/api/foursquare/search?query=pharmacy&ll={lat},{lon}&radius=1000"
+        foursquare_microservice_url = foursquare_microservice_url.format(lat=lat, lon=lon)
+        try:
+            response = requests.get(foursquare_microservice_url)
+            if response.status_code != 200:
+                print("Failed to fetch nearby pharmacies")
+                return
+            data = response.json()
+            results = data["results"][:2]
+            for r in results:
+                name = r.get("name")
+                location = r.get("location", {})
+                location_str = ",\n".join(f"{k}: {v}" for k, v in location.items() if v)
+                tel = r.get("tel", "N/A")
+                website = r.get("website", "N/A")
+                latitude, longitude = r.get("latitude"), r.get("longitude")
+                metadata = {
+                    "type": "pharmacy",
+                    "title": f"Nearby Pharmacy: {name}",
+                    "description": f"{name}\nLocation:\n{location_str}\nContact: {tel}\nWebsite: {website}\n\nHealth Alert: {alert}",
+                    "severity": "medium",
+                    "latitude": latitude,
+                    "longitude": longitude
+                }
+                print("Pushing pharmacy alert:", metadata)
+                self.alert_handler.add_alert(user_id, datetime.utcnow().isoformat(), metadata)
+        except Exception as e:
+            print("Error fetching pharmacies:", str(e))
+            return
+
+
     def run(self, user_id:str, user_input: str):
         # Step 1: Extract location information
         result = self.llm_engine_0.run(user_input)[0]
@@ -178,6 +211,9 @@ User is saying: {user_input}
         print(alert)
 
         self.push_health_alert(user_id, alert)
+        
+        if alert['is_severe']:
+            self.push_pharmacy_alert(user_id, fetched_info['lat'], fetched_info['lon'], alert['message'])
 
         return {
             "lat": fetched_info['lat'],
