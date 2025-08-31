@@ -84,6 +84,7 @@ def add_trip():
             "trip_name": "Weekend in SF",
             "user_ids": ["user123"],
             "context": "Going for a leisure trip to San Francisco on 1st Oct 2025",
+            "trip_image": "<link_to_image>",
             "metadata": {
                 "start_lat": 37.7749,
                 "start_lng": -122.4194,
@@ -94,7 +95,7 @@ def add_trip():
         }
         """
     data = request.json
-    if not data.get('trip_id') or not data.get('trip_name') or not data.get('user_ids') or not data.get('metadata'):
+    if not data.get('trip_id') or not data.get('trip_name') or not data.get('user_ids') or not data.get('context') or not data.get('trip_image') or not data.get('metadata'):
         return jsonify({"error": "Missing required fields"}), 400
 
     if not data['metadata'].get('start_lat') or not data['metadata'].get('start_lng') or not data['metadata'].get('start_time'):

@@ -75,6 +75,7 @@ class TripHandler(BaseMongoHandler):
         {
             "trip_id": "trip123",
             "trip_name": "Weekend in SF",
+            "trip_image": "<link_to_image>",    
             "user_ids": ["user123"],
             "context": "Going for a leisure trip to San Francisco on 1st Oct 2025",
             "metadata": {
