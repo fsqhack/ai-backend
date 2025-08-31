@@ -348,6 +348,14 @@ class AlertHandler(BaseMongoHandler):
             "timestamp": timestamp,
             "metadata": metadata
         }
+        
+        allowed_types = ['health', 'pharmacy', 'restaurant', 'gym', 'location']
+        if metadata.get('type') not in allowed_types:
+            return {"error": f"Invalid alert type. Allowed types: {allowed_types}"}
+        allowed_severities = ['low', 'medium', 'high']
+        if metadata.get('severity') not in allowed_severities:
+            return {"error": f"Invalid severity level. Allowed levels: {allowed_severities}"}
+
         existing_alert = self.collection.find_one({"alert_id": alert["alert_id"]})
         if existing_alert:
             self.collection.delete_one({"alert_id": alert["alert_id"]})

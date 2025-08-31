@@ -142,76 +142,76 @@ def simulate_scenario_points(user_id, trip_id, scenario, start_lat, start_lon, s
 
 
 
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-from scipy.interpolate import griddata
-import plotly.io as pio
-pio.renderers.default = "browser"
+# import pandas as pd
+# import numpy as np
+# import plotly.graph_objects as go
+# from scipy.interpolate import griddata
+# import plotly.io as pio
+# pio.renderers.default = "browser"
 
 
-def plot_3d_contour(points, metric_col="heart_rate"):
-    """
-    Create an interactive 3D contour plot of latitude, longitude, altitude vs metric value.
+# def plot_3d_contour(points, metric_col="heart_rate"):
+#     """
+#     Create an interactive 3D contour plot of latitude, longitude, altitude vs metric value.
 
-    Parameters:
-    - points: list of dicts, each containing 'data' with 'latitude', 'longitude', 'altitude', and metric_col
-    - metric_col: str, column name of the metric to visualize (inside data)
-    """
-    # Flatten list of dicts into a DataFrame
-    data = pd.DataFrame([p["data"] for p in points])
+#     Parameters:
+#     - points: list of dicts, each containing 'data' with 'latitude', 'longitude', 'altitude', and metric_col
+#     - metric_col: str, column name of the metric to visualize (inside data)
+#     """
+#     # Flatten list of dicts into a DataFrame
+#     data = pd.DataFrame([p["data"] for p in points])
 
-    # Extract arrays
-    lats = data["latitude"].values
-    lons = data["longitude"].values
-    alts = data["altitude"].values
-    metric = data[metric_col].values
+#     # Extract arrays
+#     lats = data["latitude"].values
+#     lons = data["longitude"].values
+#     alts = data["altitude"].values
+#     metric = data[metric_col].values
 
-    # Create grid
-    grid_x, grid_y, grid_z = np.mgrid[
-        lats.min():lats.max():50j,
-        lons.min():lons.max():50j,
-        alts.min():alts.max():50j
-    ]
+#     # Create grid
+#     grid_x, grid_y, grid_z = np.mgrid[
+#         lats.min():lats.max():50j,
+#         lons.min():lons.max():50j,
+#         alts.min():alts.max():50j
+#     ]
 
-    # Interpolate metric values
-    grid_metric = griddata(
-        (lats, lons, alts), metric,
-        (grid_x, grid_y, grid_z),
-        method="linear"
-    )
+#     # Interpolate metric values
+#     grid_metric = griddata(
+#         (lats, lons, alts), metric,
+#         (grid_x, grid_y, grid_z),
+#         method="linear"
+#     )
 
-    # Create interactive 3D isosurface plot
-    fig = go.Figure()
+#     # Create interactive 3D isosurface plot
+#     fig = go.Figure()
 
-    fig.add_trace(go.Isosurface(
-        x=grid_x.flatten(),
-        y=grid_y.flatten(),
-        z=grid_z.flatten(),
-        value=grid_metric.flatten(),
-        isomin=np.nanmin(metric),
-        isomax=np.nanmax(metric),
-        surface_count=5,
-        colorscale="Viridis",
-        caps=dict(x_show=False, y_show=False, z_show=False),
-        opacity=0.6
-    ))
+#     fig.add_trace(go.Isosurface(
+#         x=grid_x.flatten(),
+#         y=grid_y.flatten(),
+#         z=grid_z.flatten(),
+#         value=grid_metric.flatten(),
+#         isomin=np.nanmin(metric),
+#         isomax=np.nanmax(metric),
+#         surface_count=5,
+#         colorscale="Viridis",
+#         caps=dict(x_show=False, y_show=False, z_show=False),
+#         opacity=0.6
+#     ))
 
-    # Also show original data points as scatter
-    fig.add_trace(go.Scatter3d(
-        x=lats, y=lons, z=alts,
-        mode="markers",
-        marker=dict(size=4, color=metric, colorscale="Viridis", colorbar=dict(title=metric_col)),
-        name="Data points"
-    ))
+#     # Also show original data points as scatter
+#     fig.add_trace(go.Scatter3d(
+#         x=lats, y=lons, z=alts,
+#         mode="markers",
+#         marker=dict(size=4, color=metric, colorscale="Viridis", colorbar=dict(title=metric_col)),
+#         name="Data points"
+#     ))
 
-    fig.update_layout(
-        scene=dict(
-            xaxis_title="Latitude",
-            yaxis_title="Longitude",
-            zaxis_title="Altitude"
-        ),
-        title=f"3D Contour of {metric_col}"
-    )
+#     fig.update_layout(
+#         scene=dict(
+#             xaxis_title="Latitude",
+#             yaxis_title="Longitude",
+#             zaxis_title="Altitude"
+#         ),
+#         title=f"3D Contour of {metric_col}"
+#     )
 
-    fig.show()
+#     fig.show()

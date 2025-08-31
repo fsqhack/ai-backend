@@ -41,6 +41,13 @@ def create_alert():
     lat = metadata.get('lat')
     lon = metadata.get('lon')
 
+    allowed_types = ['health', 'pharmacy', 'restaurant', 'gym', 'location']
+    if type not in allowed_types:
+        return jsonify({"error": f"Invalid alert type. Allowed types: {allowed_types}"}), 400
+    allowed_severities = ['low', 'medium', 'high']
+    if severity not in allowed_severities:
+        return jsonify({"error": f"Invalid severity level. Allowed levels: {allowed_severities}"}), 400
+
     if not type or not title or not description:
         return jsonify({"error": "Missing required metadata fields"}), 400
     
