@@ -183,8 +183,13 @@ class TripHandler(BaseMongoHandler):
 
         return {"members": trip.get("user_ids", [])}
     
-
-
+    def get_all_trips_for_user(self, user_id):
+        """
+        Get all trips for a user.
+        Fetch those trips where user_id is present in user_ids.
+        """
+        trips = list(self.collection.find({"user_ids": user_id}))
+        return trips
 
 
 class HealthDataHandler(BaseMongoHandler):

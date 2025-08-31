@@ -192,3 +192,19 @@ def view_members():
         return jsonify(response), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+@registration_bp.route('/get-user-trips', methods=['POST'])
+def get_user_trips():
+    user_id = request.json.get('user_id')
+
+    if not user_id:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        trips = TRIP_HANDLER.get_all_trips_for_user(user_id)
+        for trip in trips:
+            trip['_id'] = str(trip['_id'])
+        return jsonify({"trips": trips}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
