@@ -328,7 +328,7 @@ class HealthDataHandler(BaseMongoHandler):
 
 class AlertHandler(BaseMongoHandler):
     def __init__(self):
-        super().__init__(collection_name="health_alerts")
+        super().__init__(collection_name="alerts")
         
     def add_alert(self, user_id, timestamp, metadata):
         """

@@ -30,7 +30,7 @@ class HealthAlert(BaseModel):
     """
     is_severe: bool = Field(..., description="True if alert is severe, False otherwise")
     alert_title: str = Field(..., description="Title of health alert, e.g., 'High Heart Rate', 'Low O2 Saturation'")
-    severity: str = Field(..., description="Severity of the alert, e.g., 'Low', 'Medium', 'High'")
+    severity: str = Field(..., description="Severity of the alert, e.g., 'low', 'medium', 'high'")
     message: str = Field(..., description="Detailed message about the alert")
     medical_advice: str = Field(..., description="Medical advice or recommendations")
     carry_medication: str = Field(..., description="Which precautionary medication to carry, if any")
@@ -134,8 +134,9 @@ Risk is consdered if
             "type": "health",
             "title": title,
             "description": description,
-            "severity": severity,
+            "severity": severity.lower()
         }
+        
         self.alert_handler.add_alert(user_id, timestamp, metadata)
 
     def run(self, user_id:str, user_input: str):
