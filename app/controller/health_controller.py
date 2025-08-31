@@ -20,6 +20,10 @@ def validate_user_trip(user_id=None, trip_id=None):
             return False, "Trip not found"
     return True, ""
 
+@health_bp.route('/', methods=['GET', 'POST'])
+def ping():
+    return jsonify({"message": "Health service is up!"}), 200
+
 @health_bp.route('/simulate-scenario', methods=['POST'])
 def simulate_scenario():
     """
