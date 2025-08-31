@@ -141,7 +141,7 @@ Risk is consdered if
         self.alert_handler.add_alert(user_id, timestamp, metadata)
 
     def push_pharmacy_alert(self, user_id: str, lat: float, lon: float, alert: str):
-        foursquare_microservice_url = "http://13.126.242.38:5000/api/foursquare/search?query=pharmacy&ll={lat},{lon}&radius=1000"
+        foursquare_microservice_url = os.getenv("FOURSQUARE_MICROSERVICE_URL","http://13.126.242.38:5000/api/foursquare/search?query=pharmacy&ll={lat},{lon}&radius=100")
         foursquare_microservice_url = foursquare_microservice_url.format(lat=lat, lon=lon)
         try:
             response = requests.get(foursquare_microservice_url)
